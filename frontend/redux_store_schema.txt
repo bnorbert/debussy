@@ -1,0 +1,6 @@
+annotations:
+projects:
+user_info:
+  - project_ids
+  - annotation_ids
+current_project_view
