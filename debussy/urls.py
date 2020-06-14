@@ -21,6 +21,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('debussy/', include('backend.urls')),
     path('debussy/', include('frontend.urls')),
+    path('debussy/', include('accounts.urls')),
 ]
 
 urlpatterns += [

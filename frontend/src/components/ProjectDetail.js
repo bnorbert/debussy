@@ -3,6 +3,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 
 class ProjectDetail extends Component {
   constructor(props) {
@@ -13,7 +14,7 @@ class ProjectDetail extends Component {
     this.onChangeVisibility = this.onChangeVisibility.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
     this.state = {
-      current_user_id: this.props.user_id,
+      current_user_id: this.props.userInfo.id,
       project_id: this.props.match.params.id,
       project_user_id: null,
       project_name: '',
@@ -25,7 +26,14 @@ class ProjectDetail extends Component {
   }
 
   componentDidMount() {
-    axios.get("http://localhost:8000/debussy/api/projects/" + this.state.project_id)
+    const { userInfo } = this.props;
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${userInfo.token}`,
+      },
+    };
+    axios.get("http://localhost:8000/debussy/api/projects/" + this.state.project_id, config)
       .then(response => response.data)
       .then(project_details => this.setState({
         project_name: project_details.name,
@@ -77,9 +85,15 @@ class ProjectDetail extends Component {
       annotations: this.state.annotation_ids
     };
     console.log("saving")
-    console.log(obj)
+    const { userInfo } = this.props;
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${userInfo.token}`,
+      },
+    };
 
-    axios.patch('http://localhost:8000/debussy/api/projects/1/', obj)
+    axios.patch('http://localhost:8000/debussy/api/projects/' + this.state.project_id + '/', obj, config)
         .then(response => console.log(response));
     //this.props.history.push('/frontend/');
   }
@@ -93,7 +107,8 @@ class ProjectDetail extends Component {
             <input type="submit" value="Save"/>
           </div>
       );
-    return (<form onSubmit={this.onSubmit}>
+    return (<div>
+      <form onSubmit={this.onSubmit}>
                 <div>
                     <label>Project Name:  </label>
                     <input
@@ -124,19 +139,21 @@ class ProjectDetail extends Component {
                   </select>
                 </div>
                 {submitButton}
-            </form>)
+            </form>
+          <Link to={"/frontend/projects/annotate/" + this.state.project_id} className="nav-link" >Annotate</Link>
+          </div>)
   }
 }
 
 ProjectDetail.propTypes = {
-  user_id: PropTypes.number.isRequired,
+  userInfo: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
   const { userInfo } = state;
   return {
-    user_id: userInfo.id
+    userInfo
   }
 }
 

@@ -20,9 +20,9 @@ function annotations(state = [], action) {
   }
 }
 
-function userInfo(state = {id: -1}, action) {
+function userInfo(state = {id: -1, logged_in: false}, action) {
   switch (action.type) {
-    case 'RECECIVED_USER_INFO':
+    case 'LOGGED_IN_USER':
       return action.userInfo;
     default:
       return state;

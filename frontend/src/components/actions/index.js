@@ -3,27 +3,54 @@ import axios from 'axios';
 
 // -------------------- USER INFO --------------------
 
-function requestUserInfo() {
+function extract_user_data(data) {
   return {
-    type: 'REQUEST_USER_INFO'
+    id: data.user.id,
+    username: data.user.username,
+    email: data.user.email,
+    token: data.token,
+    logged_in: true
   }
 }
 
-function receiveUserInfo(json) {
+function loggedInUser(data) {
+
   return {
-    type: 'RECECIVED_USER_INFO',
-    userInfo: json
+    type: 'LOGGED_IN_USER',
+    userInfo: extract_user_data(data)
   }
 }
 
-export function fetchUserInfo() {
+function registeredUser(json) {
+  return {
+    type: 'REGISTERED_USER',
+    userInfo: extract_user_data(data)
+  }
+}
+
+function loggedOutUser(json) {
+  return {
+    type: 'LOGGED_OUT_USER',
+    userInfo: {id: -1, logged_in: false}
+  }
+}
+
+export function logInUser(username, password) {
   return dispatch => {
-    dispatch(requestUserInfo());
-    return fetch("http://localhost:8000/debussy/api/users/current_user_info/")
-      .then(response => response.json())
-      .then(json => dispatch(receiveUserInfo(json)))
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const body = JSON.stringify({ username, password });
+
+    return axios.post("http://localhost:8000/debussy/api/auth/login", body, config)
+      .then(response => response.data)
+      .then(data => dispatch(loggedInUser(data)))
+      .catch(err => console.log(err))
   }
 }
+
 
 
 
@@ -73,10 +100,18 @@ function receiveAllProjects(project_list) {
   }
 }
 
-export function fetchAllProjects() {
+export function fetchAllProjects(token) {
   return dispatch => {
     dispatch(requestAllProjects());
-    return axios.get("http://localhost:8000/debussy/api/projects/")
+    // Headers
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${token}`,
+      },
+    };
+
+    return axios.get("http://localhost:8000/debussy/api/projects/", config)
       .then(response => {
         return response.data
       })

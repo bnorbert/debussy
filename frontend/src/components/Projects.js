@@ -11,12 +11,14 @@ import { fetchAllProjects } from './actions';
 class Projects extends Component {
   constructor(props) {
     super(props);
-    const { dispatch } = this.props;
-    dispatch(fetchAllProjects());
+    const { dispatch, userInfo } = this.props;
+    dispatch(fetchAllProjects(userInfo.token));
   }
 
   render() {
-    const { projects } = this.props
+    const { projects, userInfo } = this.props
+    console.log("IN PROJECTS")
+    console.log(userInfo)
 
     return (
       <div>
@@ -38,13 +40,15 @@ class Projects extends Component {
 
 Projects.propTypes = {
   projects: PropTypes.array.isRequired,
+  userInfo: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
-  const { projects } = state
+  const { projects, userInfo } = state
   return {
-    projects
+    projects,
+    userInfo
   }
 }
 

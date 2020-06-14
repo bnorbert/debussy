@@ -10,15 +10,15 @@ import Home from './Home';
 import Projects from './Projects';
 import ProjectAdd from './ProjectAdd';
 import ProjectDetail from './ProjectDetail';
+import Annotate from './Annotate';
 import AllAnnotations from './AllAnnotations';
 import UserAnnotations from './UserAnnotations';
+import Login from './Login';
 
 
 class App extends Component {
   constructor(props) {
     super(props);
-    const { dispatch } = this.props;
-    dispatch(fetchUserInfo());
   }
 
   render() {
@@ -32,6 +32,7 @@ class App extends Component {
             <li><Link to={'/frontend/project_list'} className="nav-link">Projects</Link></li>
             <li><Link to={'/frontend/all_annotations'} className="nav-link">All Annotations</Link></li>
             <li><Link to={'/frontend/my_annotations'} className="nav-link">My Annotations</Link></li>
+            <li><Link to={'/frontend/login'} className="nav-link">Login</Link></li>
           </ul>
           </nav>
           <hr />
@@ -42,6 +43,8 @@ class App extends Component {
               <Route path='/frontend/my_annotations' component={UserAnnotations} />
               <Route path='/frontend/projects/detail/:id' component={ProjectDetail} />
               <Route path='/frontend/projects/add' component={ProjectAdd} />
+              <Route path='/frontend/projects/annotate/:id' component={Annotate} />
+              <Route path='/frontend/login' component={Login} />
           </Switch>
         </div>
       </Router>

@@ -5,7 +5,6 @@ from backend import views
 # Create a router and register our viewsets with it.
 router = DefaultRouter()
 router.register(r'projects', views.ProjectViewSet)
-router.register(r'users', views.UserViewSet)
 router.register(r'annotations', views.AnnotationViewSet)
 
 # The API URLs are now determined automatically by the router.

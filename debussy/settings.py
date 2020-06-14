@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'backend.apps.BackendConfig',
     'rest_framework',
     'frontend',
+    'knox',
+    'accounts',
 ]
 
 MIDDLEWARE = [
@@ -127,7 +129,8 @@ MEDIA_URL = '/media/'
 
 # this is needed so that rest_framework page is not shown
 REST_FRAMEWORK = {
-    'DEFAULT_RENDERER_CLASSES': (
-        'rest_framework.renderers.JSONRenderer',
-    )
+    # 'DEFAULT_RENDERER_CLASSES': (
+    #     'rest_framework.renderers.JSONRenderer',
+    # ),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',)
 }

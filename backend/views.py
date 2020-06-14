@@ -50,18 +50,6 @@ class ProjectViewSet(viewsets.ModelViewSet):
 
         response = HttpResponse(content_type="image/png")
 
-        image_generated.save(response, 'JPEG')
+        image_generated.save(response, 'PNG')
 
         return response
-
-
-class UserViewSet(viewsets.ReadOnlyModelViewSet):
-    """This viewset automatically provides `list` and `detail` actions.
-    """
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-
-    @action(detail=False, methods=['get'])
-    def current_user_info(self, request):
-        current_user = request.user
-        return Response(UserSerializer(current_user).data)
