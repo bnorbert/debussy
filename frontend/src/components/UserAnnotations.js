@@ -1,14 +1,14 @@
 import React, { Component } from 'react';
 import { render } from "react-dom";
 import PropTypes from 'prop-types';
-import { fetchUserAnnotationsData } from './actions';
+import { fetchAllAnnotations } from './actions';
 import { connect } from 'react-redux'
 
 class UserAnnotations extends Component {
   constructor(props) {
     super(props);
-    const { dispatch } = this.props;
-    dispatch(fetchUserAnnotations())
+    const { dispatch, userInfo } = this.props;
+    dispatch(fetchAllAnnotations(userInfo.token))
   }
 
   render() {

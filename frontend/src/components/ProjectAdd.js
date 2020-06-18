@@ -1,6 +1,8 @@
 import { render } from "react-dom";
 import axios from 'axios';
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 
 class ProjectAdd extends Component {
   constructor(props) {
@@ -50,15 +52,21 @@ class ProjectAdd extends Component {
       isprivate = true;
     }
     const obj = {
-      project_name: this.state.project_name,
+      name: this.state.project_name,
       description: this.state.description,
       categories: this.state.categories,
       private: isprivate,
       annotations: []
     };
-    console.log(obj)
+    const { userInfo } = this.props;
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${userInfo.token}`,
+      },
+    };
 
-    axios.post('http://localhost:8000/debussy/api/projects/', obj)
+    axios.post('http://localhost:8000/debussy/api/projects/', obj, config)
         .then(res => console.log(res));
     this.props.history.push('/frontend/');
   }
@@ -102,4 +110,16 @@ class ProjectAdd extends Component {
   }
 }
 
-export default ProjectAdd;
+ProjectAdd.propTypes = {
+  userInfo: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired
+}
+
+function mapStateToProps(state) {
+  const { userInfo } = state;
+  return {
+    userInfo
+  }
+}
+
+export default connect(mapStateToProps)(ProjectAdd);

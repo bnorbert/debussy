@@ -14,6 +14,7 @@ import Annotate from './Annotate';
 import AllAnnotations from './AllAnnotations';
 import UserAnnotations from './UserAnnotations';
 import Login from './Login';
+import Register from './Register';
 
 
 class App extends Component {
@@ -33,6 +34,7 @@ class App extends Component {
             <li><Link to={'/frontend/all_annotations'} className="nav-link">All Annotations</Link></li>
             <li><Link to={'/frontend/my_annotations'} className="nav-link">My Annotations</Link></li>
             <li><Link to={'/frontend/login'} className="nav-link">Login</Link></li>
+            <li><Link to={'/frontend/register'} className="nav-link">Register</Link></li>
           </ul>
           </nav>
           <hr />
@@ -45,6 +47,7 @@ class App extends Component {
               <Route path='/frontend/projects/add' component={ProjectAdd} />
               <Route path='/frontend/projects/annotate/:id' component={Annotate} />
               <Route path='/frontend/login' component={Login} />
+              <Route path='/frontend/register' component={Register} />
           </Switch>
         </div>
       </Router>
@@ -52,10 +55,14 @@ class App extends Component {
   }
 }
 App.propTypes = {
+  userInfo: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 function mapStateToProps(state) {
-  return {};
+  const { userInfo } = state;
+  return {
+    userInfo
+  };
 }
 
 export default connect(mapStateToProps)(App);

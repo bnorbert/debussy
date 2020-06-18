@@ -14,6 +14,7 @@ class Annotate extends Component {
       project_id: this.props.match.params.id,
       category: '',
       source: null,
+      data: null,
     }
 
     const { userInfo } = this.props;
@@ -24,16 +25,8 @@ class Annotate extends Component {
     };
     axios.get('http://localhost:8000/debussy/api/projects/generate_image/', config)
       .then(response => {
-        response.data.arrayBuffer().then((buffer) => {
-          let base64Flag = 'data:image/jpeg;base64,';
-
-          let binary = '';
-          let bytes = [].slice.call(new Uint8Array(buffer));
-          bytes.forEach((b) => binary += String.fromCharCode(b));
-          let imageStr = btoa(binary);
-
-          this.setState({ source: base64Flag + imageStr});
-        });
+        console.log(response);
+        this.setState({data: response.data});
       });
   }
 
@@ -54,7 +47,7 @@ class Annotate extends Component {
   render() {
     const { userInfo } = this.props;
     return (<form onSubmit={this.onSubmit}>
-            <img src={this.state.source} />;
+            <img src={`data:image/jpeg;base64,${this.state.data}`} />
                 <div>
                     <label>Category:  </label>
                     <input

@@ -7,8 +7,8 @@ import { connect } from 'react-redux'
 class AllAnnotations extends Component {
   constructor(props) {
     super(props);
-    const { dispatch } = this.props;
-    dispatch(fetchAllAnnotations());
+    const { dispatch, userInfo } = this.props;
+    dispatch(fetchAllAnnotations(userInfo.token));
   }
 
   render() {
@@ -35,14 +35,16 @@ class AllAnnotations extends Component {
 AllAnnotations.propTypes = {
   isFetchingAnnotations: PropTypes.bool.isRequired,
   annotations: PropTypes.array.isRequired,
+  userInfo: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired
 }
 
 function mapStateToProps(state) {
-  const { isFetchingAnnotations, annotations } = state
+  const { isFetchingAnnotations, annotations, userInfo } = state
   return {
     isFetchingAnnotations,
-    annotations
+    annotations,
+    userInfo
   }
 }
 

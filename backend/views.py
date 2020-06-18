@@ -9,6 +9,9 @@ from rest_framework.decorators import action
 from backend.generative_model import GenerativeModel
 from django.http import HttpResponse
 
+import base64
+from io import BytesIO
+
 
 class AnnotationViewSet(viewsets.ModelViewSet):
     """ This viewset automatically provides `list`, `create`, `retrieve`,
@@ -29,9 +32,15 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """ This viewset automatically provides `list`, `create`, `retrieve`,
     `update` and `destroy` actions.
     """
-    queryset = Project.objects.all()
     serializer_class = ProjectSerializer
     permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        projects = Project.objects.all()
+        return [
+            project for project in projects
+            if project.owner.id == self.request.user.id or project.private == False
+        ]
 
     @action(detail=False, methods=['get'])
     def my_projects(self, request):
@@ -48,8 +57,8 @@ class ProjectViewSet(viewsets.ModelViewSet):
         image_generated = model.generate()
         image_generated = image_generated.resize((200, 200))
 
-        response = HttpResponse(content_type="image/png")
+        buffered = BytesIO()
+        image_generated.save(buffered, format="JPEG")
+        img_str = base64.b64encode(buffered.getvalue())
 
-        image_generated.save(response, 'PNG')
-
-        return response
+        return HttpResponse(img_str, content_type="text/plain")

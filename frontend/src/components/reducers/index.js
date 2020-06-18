@@ -23,6 +23,7 @@ function annotations(state = [], action) {
 function userInfo(state = {id: -1, logged_in: false}, action) {
   switch (action.type) {
     case 'LOGGED_IN_USER':
+    case 'REGISTERED_USER':
       return action.userInfo;
     default:
       return state;

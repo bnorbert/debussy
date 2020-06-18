@@ -8,6 +8,7 @@ class Project(models.Model):
     owner = models.ForeignKey(User, related_name='projects', on_delete=models.CASCADE, default=1)
     private = models.BooleanField()
     categories = models.CharField(max_length=200)
+    created_at = models.DateTimeField(auto_now=True)
 
 
 class Annotation(models.Model):

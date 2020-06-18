@@ -21,7 +21,7 @@ function loggedInUser(data) {
   }
 }
 
-function registeredUser(json) {
+function registeredUser(data) {
   return {
     type: 'REGISTERED_USER',
     userInfo: extract_user_data(data)
@@ -51,6 +51,21 @@ export function logInUser(username, password) {
   }
 }
 
+export function registerUser(username, password, email) {
+  return dispatch => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const body = JSON.stringify({ username, password, email });
+    return axios.post("http://localhost:8000/debussy/api/auth/register", body, config)
+      .then(response => response.data)
+      .then(data => dispatch(registeredUser(data)))
+      .catch(err => console.log(err))
+  }
+}
+
 
 
 
@@ -69,20 +84,19 @@ function receiveAllAnnotations(json) {
   }
 }
 
-export function fetchAllAnnotations() {
+export function fetchAllAnnotations(token) {
   return dispatch => {
     dispatch(requestAllAnnotations())
-    return fetch("http://localhost:8000/debussy/api/annotations/")
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${token}`,
+      },
+    };
+    return axios.get("http://localhost:8000/debussy/api/annotations/", config)
       .then(response => response.json())
       .then(json => dispatch(receiveAllAnnotations(json)))
   }
-}
-
-export function fetchUserAnnotationsData() {
-  return dispatch => Promise.all([
-    dispatch(fetchUserInfo()),
-    dispatch(fetchAllAnnotations())
-  ])
 }
 
 // ------------------------ PROJECTS ------------------------
