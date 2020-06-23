@@ -8,9 +8,11 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 from backend.generative_model import GenerativeModel
 from django.http import HttpResponse
+from rest_framework.parsers import JSONParser, MultiPartParser
 
 import base64
 from io import BytesIO
+import pdb
 
 
 class AnnotationViewSet(viewsets.ModelViewSet):
@@ -34,13 +36,14 @@ class ProjectViewSet(viewsets.ModelViewSet):
     """
     serializer_class = ProjectSerializer
     permission_classes = [permissions.IsAuthenticated]
+    queryset = Project.objects.all()
 
-    def get_queryset(self):
-        projects = Project.objects.all()
-        return [
-            project for project in projects
-            if project.owner.id == self.request.user.id or project.private == False
-        ]
+    # def get_queryset(self):
+    #     projects = Project.objects.all()
+    #     return [
+    #         project for project in projects
+    #         if project.owner.id == self.request.user.id or project.private == False
+    #     ]
 
     @action(detail=False, methods=['get'])
     def my_projects(self, request):

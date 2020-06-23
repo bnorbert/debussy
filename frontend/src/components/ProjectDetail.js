@@ -33,7 +33,7 @@ class ProjectDetail extends Component {
         'Authorization': `Token ${userInfo.token}`,
       },
     };
-    axios.get("http://localhost:8000/debussy/api/projects/" + this.state.project_id, config)
+    axios.get("http://localhost:8000/debussy/api/projects/" + this.state.project_id + "/", config)
       .then(response => response.data)
       .then(project_details => this.setState({
         project_name: project_details.name,

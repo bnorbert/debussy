@@ -13,7 +13,6 @@ class Annotate extends Component {
     this.state = {
       project_id: this.props.match.params.id,
       category: '',
-      source: null,
       data: null,
     }
 
@@ -30,7 +29,6 @@ class Annotate extends Component {
       });
   }
 
-
   onChangeCategory(e) {
     this.setState({
       category: e.target.value
@@ -39,15 +37,35 @@ class Annotate extends Component {
 
   onSubmit(e) {
     e.preventDefault();
-    const { dispatch } = this.props;
+    console.log("SENDING...");
+    const { dispatch, userInfo } = this.props;
 
-    //this.props.history.push('/frontend/');
+    const img = `data:image/jpeg;base64,${this.state.data}`;
+    const obj = JSON.stringify({
+      project: this.state.project_id,
+      annotator: userInfo.id,
+      category: this.state.category,
+      image: img,
+      notes: 'some_notes',
+    });
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Token ${userInfo.token}`,
+      },
+    };
+
+    axios.post('http://localhost:8000/debussy/api/annotations/', obj, config)
+        .then(res => this.props.history.push('/frontend/'))
+        .catch(err => console.log(err.message));
+
+
   }
 
   render() {
     const { userInfo } = this.props;
-    return (<form onSubmit={this.onSubmit}>
-            <img src={`data:image/jpeg;base64,${this.state.data}`} />
+    return (<div><img src={`data:image/jpeg;base64,${this.state.data}`} />
+    <form onSubmit={this.onSubmit}>
                 <div>
                     <label>Category:  </label>
                     <input
@@ -60,7 +78,7 @@ class Annotate extends Component {
                     <input type="submit"
                       value="Add annotation"/>
                 </div>
-            </form>)
+            </form></div>)
   }
 }
 

@@ -94,7 +94,7 @@ export function fetchAllAnnotations(token) {
       },
     };
     return axios.get("http://localhost:8000/debussy/api/annotations/", config)
-      .then(response => response.json())
+      .then(response => response.data)
       .then(json => dispatch(receiveAllAnnotations(json)))
   }
 }

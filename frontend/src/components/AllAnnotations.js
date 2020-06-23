@@ -20,7 +20,10 @@ class AllAnnotations extends Component {
           {annotations.map(annotation => {
             return (
               <li key={annotation.id}>
-                {annotation.id}, {annotation.notes}, {annotation.category}
+                <div>
+                <p>{annotation.id}, {annotation.notes}, {annotation.category}</p>
+                <img src={`data:image/jpeg;base64,${annotation.image}`} />
+                </div>
               </li>
             );
           })}
