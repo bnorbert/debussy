@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { logInUser } from './actions';
+import { Form, Button, Container } from 'react-bootstrap';
 
 class Login extends Component {
   constructor(props) {
@@ -34,32 +35,26 @@ class Login extends Component {
     const { username, password } = this.state;
     dispatch(logInUser(username, password))
 
-    //this.props.history.push('/frontend/');
+    this.props.history.push('/frontend/');
   }
 
   render() {
     const { userInfo } = this.props;
-    return (<form onSubmit={this.onSubmit}>
-                <div>
-                    <label>Username:  </label>
-                    <input
-                      type="text"
-                      value={this.state.username}
-                      onChange={this.onChangeUsername}
-                      />
-                </div>
-                <div className="form-group">
-                    <label>Password: </label>
-                    <input type="password"
-                      value={this.state.password}
-                      onChange={this.onChangePassword}
-                      />
-                </div>
-                <div>
-                    <input type="submit"
-                      value="Login"/>
-                </div>
-            </form>)
+    return (<Container>
+          <Form onSubmit={this.onSubmit}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Username</Form.Label>
+              <Form.Control type="text" value={this.state.username} onChange={this.onChangeUsername} />
+            </Form.Group>
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" value={this.state.password} onChange={this.onChangePassword} />
+            </Form.Group>
+            <Button variant="outline-primary" type="submit">
+              Login
+            </Button>
+          </Form></Container>
+        )
   }
 }
 

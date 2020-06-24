@@ -16,4 +16,4 @@ class Annotation(models.Model):
     annotator = models.ForeignKey(User, related_name='annotations', on_delete=models.CASCADE)
     category = models.CharField(max_length=20)
     image = models.ImageField(default='default.jpg', upload_to='annotation_images')
-    notes = models.CharField(max_length=100)
+    notes = models.TextField(max_length=1000)

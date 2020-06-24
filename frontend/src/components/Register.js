@@ -4,6 +4,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { registerUser } from './actions';
+import { Form, Container, Button } from 'react-bootstrap';
 
 class Register extends Component {
   constructor(props) {
@@ -41,40 +42,31 @@ class Register extends Component {
     const { username, password, email } = this.state;
     dispatch(registerUser(username, password, email))
 
-    //this.props.history.push('/frontend/');
+    this.props.history.push('/frontend/');
   }
 
   render() {
     const { userInfo } = this.props;
-    return (<form onSubmit={this.onSubmit}>
-                <div>
-                    <label>Username:  </label>
-                    <input
-                      type="text"
-                      value={this.state.username}
-                      onChange={this.onChangeUsername}
-                      />
-                </div>
-                <div>
-                    <label>Email:  </label>
-                    <input
-                      type="text"
-                      value={this.state.email}
-                      onChange={this.onChangeEmail}
-                      />
-                </div>
-                <div className="form-group">
-                    <label>Password: </label>
-                    <input type="password"
-                      value={this.state.password}
-                      onChange={this.onChangePassword}
-                      />
-                </div>
-                <div>
-                    <input type="submit"
-                      value="Register"/>
-                </div>
-            </form>)
+    return (
+            <Container>
+              <Form onSubmit={this.onSubmit}>
+                <Form.Group controlId="formBasicUsername">
+                  <Form.Label>Username</Form.Label>
+                  <Form.Control type="text" value={this.state.username} onChange={this.onChangeUsername} />
+                </Form.Group>
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control type="email" value={this.state.email} onChange={this.onChangeEmail} />
+                </Form.Group>
+                <Form.Group controlId="formBasicPassword">
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control type="password" value={this.state.password} onChange={this.onChangePassword} />
+                </Form.Group>
+                <Button variant="outline-primary" type="submit">
+                  Register
+                </Button>
+              </Form>
+            </Container>)
   }
 }
 

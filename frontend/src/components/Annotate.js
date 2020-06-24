@@ -4,15 +4,23 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 
+import { Container, Image, Button, Form } from 'react-bootstrap';
+
 class Annotate extends Component {
   constructor(props) {
     super(props)
+    if(!this.props.userInfo.logged_in) {
+      this.props.history.push('/frontend/login');
+    }
     this.onChangeCategory = this.onChangeCategory.bind(this);
+    this.onChangeNotes = this.onChangeNotes.bind(this);
     this.onSubmit = this.onSubmit.bind(this);
+    this.refreshImage = this.refreshImage.bind(this);
 
     this.state = {
       project_id: this.props.match.params.id,
       category: '',
+      notes: '',
       data: null,
     }
 
@@ -24,7 +32,21 @@ class Annotate extends Component {
     };
     axios.get('http://localhost:8000/debussy/api/projects/generate_image/', config)
       .then(response => {
-        console.log(response);
+        this.setState({data: response.data});
+      });
+  }
+
+  refreshImage(e) {
+    e.preventDefault();
+
+    const { userInfo } = this.props;
+    const config = {
+      headers: {
+        'Authorization': `Token ${userInfo.token}`,
+      },
+    };
+    axios.get('http://localhost:8000/debussy/api/projects/generate_image/', config)
+      .then(response => {
         this.setState({data: response.data});
       });
   }
@@ -35,9 +57,14 @@ class Annotate extends Component {
     });
   }
 
+  onChangeNotes(e) {
+    this.setState({
+      notes: e.target.value
+    });
+  }
+
   onSubmit(e) {
     e.preventDefault();
-    console.log("SENDING...");
     const { dispatch, userInfo } = this.props;
 
     const img = `data:image/jpeg;base64,${this.state.data}`;
@@ -45,8 +72,8 @@ class Annotate extends Component {
       project: this.state.project_id,
       annotator: userInfo.id,
       category: this.state.category,
+      notes: this.state.notes,
       image: img,
-      notes: 'some_notes',
     });
     const config = {
       headers: {
@@ -58,27 +85,29 @@ class Annotate extends Component {
     axios.post('http://localhost:8000/debussy/api/annotations/', obj, config)
         .then(res => this.props.history.push('/frontend/'))
         .catch(err => console.log(err.message));
-
-
   }
 
   render() {
     const { userInfo } = this.props;
-    return (<div><img src={`data:image/jpeg;base64,${this.state.data}`} />
-    <form onSubmit={this.onSubmit}>
-                <div>
-                    <label>Category:  </label>
-                    <input
-                      type="text"
-                      value={this.state.category}
-                      onChange={this.onChangeCategory}
-                      />
-                </div>
-                <div>
-                    <input type="submit"
-                      value="Add annotation"/>
-                </div>
-            </form></div>)
+    return (<Container>
+      <Image src={`data:image/jpeg;base64,${this.state.data}`} rounded className="mb-2 border border-warning img-thumbnail"/>
+      <Container>
+        <Button variant="outline-info" className="mr-3 mb-2" onClick={this.refreshImage}>Refresh</Button>
+      </Container>
+      <Container>
+        <Form onSubmit={this.onSubmit}>
+          <Form.Group controlId="formBasicCategory">
+            <Form.Label>Category</Form.Label>
+            <Form.Control type="text" value={this.state.category} onChange={this.onChangeCategory} />
+          </Form.Group>
+          <Form.Group controlId="formBasicCategory">
+            <Form.Label>Notes</Form.Label>
+            <Form.Control as="textarea" rows="3" value={this.state.notes} onChange={this.onChangeNotes} />
+          </Form.Group>
+          <Button type="submit" variant="outline-primary">Add annotation</Button>
+        </Form>
+      </Container>
+      </Container>)
   }
 }
 

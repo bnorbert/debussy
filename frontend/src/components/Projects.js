@@ -8,10 +8,15 @@ import { connect } from 'react-redux';
 
 import { fetchAllProjects } from './actions';
 
+import { CardGroup, Card, Container, Button, Row } from 'react-bootstrap';
+
 class Projects extends Component {
   constructor(props) {
     super(props);
     const { dispatch, userInfo } = this.props;
+    if(!userInfo.logged_in){
+      this.props.history.push('/frontend/login');
+    }
     dispatch(fetchAllProjects(userInfo.token));
   }
 
@@ -21,19 +26,25 @@ class Projects extends Component {
     console.log(userInfo)
 
     return (
-      <div>
-      <ul>
-        {projects.map(project => {
-          return (
-            <li key={project.id}>
-              id: {project.id}, name: {project.name}, owner: {project.owner}, is private: {project.private}, categories: {project.categories}
-              <Link to={"/frontend/projects/detail/" + project.id} className="nav-link" >DETAIL</Link>
-            </li>
-          );
-        })}
-      </ul>
-      <Link to={"/frontend/projects/add"} className="nav-link" >Add project</Link>
-      </div>
+      <Container>
+          <Link to={"/frontend/projects/add"}><Button variant="outline-success" size="lg" className="mb-2">New project</Button></Link>
+          {projects.map(project => {
+            return (
+              <Row key={project.id}>
+                <Card style={{ width: '40rem' }} className="mb-2">
+                  <Card.Header as="h5">{project.name}</Card.Header>
+                  <Card.Body>
+                    <Card.Title>Categories: {project.categories}</Card.Title>
+                    <Card.Text>
+                      {project.description}
+                    </Card.Text>
+                    <Link to={"/frontend/projects/detail/" + project.id}><Button variant="outline-primary">Details</Button></Link>
+                  </Card.Body>
+                </Card>
+              </Row>
+            );
+          })}
+      </Container>
     );
   }
 }

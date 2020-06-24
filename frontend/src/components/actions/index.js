@@ -14,7 +14,6 @@ function extract_user_data(data) {
 }
 
 function loggedInUser(data) {
-
   return {
     type: 'LOGGED_IN_USER',
     userInfo: extract_user_data(data)
@@ -131,4 +130,11 @@ export function fetchAllProjects(token) {
       })
       .then(project_list => dispatch(receiveAllProjects(project_list)))
   }
+}
+
+export function fetchAnnotationsAndProjects(token) {
+  return dispatch => Promise.all([
+    dispatch(fetchAllAnnotations(token)),
+    dispatch(fetchAllProjects(token)),
+  ])
 }
