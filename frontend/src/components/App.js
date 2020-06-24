@@ -17,6 +17,9 @@ import Login from './Login';
 import Register from './Register';
 
 
+import { Navbar, Nav } from 'react-bootstrap';
+
+
 class App extends Component {
   constructor(props) {
     super(props);
@@ -26,17 +29,17 @@ class App extends Component {
     return (
     <Router>
         <div>
-          <h2>Welcome to React Router Tutorial</h2>
-          <nav className="navbar navbar-expand-lg navbar-light bg-light">
-          <ul className="navbar-nav mr-auto">
-            <li><Link to={'/frontend/'} className="nav-link">Home</Link></li>
-            <li><Link to={'/frontend/project_list'} className="nav-link">Projects</Link></li>
-            <li><Link to={'/frontend/all_annotations'} className="nav-link">All Annotations</Link></li>
-            <li><Link to={'/frontend/my_annotations'} className="nav-link">My Annotations</Link></li>
-            <li><Link to={'/frontend/login'} className="nav-link">Login</Link></li>
-            <li><Link to={'/frontend/register'} className="nav-link">Register</Link></li>
-          </ul>
-          </nav>
+            <Navbar bg="dark" variant="dark">
+            <Navbar.Brand as={Link} to={'/frontend/'}>debussy</Navbar.Brand>
+            <Nav className="mr-auto">
+              <Nav.Link as={Link} to={'/frontend/'}>Home</Nav.Link>
+              <Nav.Link as={Link} to={'/frontend/project_list'}>Projects</Nav.Link>
+              <Nav.Link as={Link} to={'/frontend/all_annotations'}>All Annotations</Nav.Link>
+              <Nav.Link as={Link} to={'/frontend/my_annotations'}>My Annotations</Nav.Link>
+              <Nav.Link as={Link} to={'/frontend/login'}>Login</Nav.Link>
+              <Nav.Link as={Link} to={'/frontend/register'}>Register</Nav.Link>
+            </Nav>
+          </Navbar>
           <hr />
           <Switch>
               <Route exact path='/frontend/' component={Home} />

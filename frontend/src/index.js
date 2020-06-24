@@ -7,7 +7,6 @@ import { createLogger } from 'redux-logger'
 import reducer from './components/reducers'
 
 import App from './components/App'
-import AllAnnotations from './components/AllAnnotations'
 
 const middleware = [ thunk ]
 if (process.env.NODE_ENV !== 'production') {
