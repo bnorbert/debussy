@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
-import { Form, Container, Button} from 'react-bootstrap';
+import { Form, Container, Button, Alert } from 'react-bootstrap';
 
 class ProjectDetail extends Component {
   constructor(props) {
@@ -110,6 +110,9 @@ class ProjectDetail extends Component {
       submitButton = (
           <Button variant="outline-primary" type="submit" className="mb-2">Save</Button>
       );
+    else {
+      submitButton = <Alert variant="warning">You cannot update this project as you are not the owner of it</Alert>
+    }
     return (<Container>
       <Form onSubmit={this.onSubmit}>
         <Form.Group controlId="formBasicProjectName">
