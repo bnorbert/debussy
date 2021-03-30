@@ -9,7 +9,7 @@ chardet==3.0.4
 cloudpickle==1.4.1
 cryptography==2.9.2
 decorator==4.4.2
-Django==3.0.7
+Django==3.0.12
 django-rest-knox==4.1.0
 djangorestframework==3.11.0
 gast==0.2.2
